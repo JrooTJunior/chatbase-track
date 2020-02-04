@@ -14,11 +14,23 @@ class AbstractBackend(abc.ABC):
     def __init__(self, api_url: str = API_URL):
         self.api_url = api_url
 
+    @classmethod
+    def _render_message(cls, message: Message) -> Dict[str, Any]:
+        log.info(
+            "Track event %r from user %r (handled=%s)",
+            message.intent or message.message,
+            message.user_id,
+            not message.not_handled,
+        )
+        return message.render_message()
+
     def process_messages(self, *messages: Message):
         log.debug("Track events: %s", messages)
         return self.make_request(
             endpoint=f"{self.api_url}/messages",
-            payload={"messages": [message.render_message() for message in messages]},
+            payload={
+                "messages": [self._render_message(message) for message in messages]
+            },
             messages=messages,
         )
 
