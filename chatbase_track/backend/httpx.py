@@ -32,7 +32,6 @@ class HttpxBackend(AbstractBackend):
         self, endpoint: str, payload: Dict[str, Any], messages: Tuple[Message]
     ):
         response = await self.session.post(endpoint, json=payload)
-        response.raise_for_status()
         return self.build_response(response.json(), messages=messages)
 
     async def close(self):

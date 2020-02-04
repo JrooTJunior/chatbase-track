@@ -35,7 +35,6 @@ class AiohttpBackend(AbstractBackend):
         async with self.session.post(
             endpoint, json=payload, timeout=aiohttp.ClientTimeout(total=5)
         ) as response:
-            response.raise_for_status()
             return self.build_response(await response.json(), messages=messages)
 
     async def close(self):

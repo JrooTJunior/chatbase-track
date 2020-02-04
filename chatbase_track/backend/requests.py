@@ -35,7 +35,6 @@ class RequestsBackend(AbstractBackend):
         self, endpoint: str, payload: Dict[str, Any], messages: Tuple[Message]
     ):
         response = self.session.post(endpoint, json=payload, timeout=5)
-        response.raise_for_status()
         return self.build_response(response.json(), messages=messages)
 
     def close(self):
